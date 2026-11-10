@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>The Showroom: My Collection</title>
+<title>My Collection</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -95,7 +95,7 @@ padding:.6rem 1.1rem;border-radius:999px;opacity:0;transition:.4s var(--ease);z-
 <main>
   <section class="hero">
     <h1>My Collection</h1>
-    <p>Pick a shelf. Move your cursor (or finger) over anything to turn it in the light.</p>
+    <p>Pick a shelf.</p>
   </section>
   <div class="setup" id="setup">Firebase isn't connected yet. Paste your config into <code>firebaseConfig</code> at the top of the script in this file.</div>
   <nav id="tabs" role="tablist"></nav>
@@ -154,10 +154,13 @@ import {getFirestore,collection,addDoc,deleteDoc,doc,onSnapshot,query,orderBy,se
 
 // 1) PASTE YOUR FIREBASE CONFIG HERE (Firebase console > Project settings > Your apps > Web app)
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCvj0I-JUd1AJ7vWKwTzH97HBgnZYR5Cto",
+  authDomain: "hotwheels-and-stuff.firebaseapp.com",
+  projectId: "hotwheels-and-stuff",
+  storageBucket: "hotwheels-and-stuff.firebasestorage.app",
+  messagingSenderId: "332582091390",
+  appId: "1:332582091390:web:43e4d8fd403c90ab22f62f",
+  measurementId: "G-9VD0JVD6TH"
 };
 
 const CATS = ["Hot Wheels","LEGO","Action Figures","Die-cast Models"];
