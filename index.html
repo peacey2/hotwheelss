@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -95,7 +95,7 @@ padding:.6rem 1.1rem;border-radius:999px;opacity:0;transition:.4s var(--ease);z-
 <main>
   <section class="hero">
     <h1>My Collection</h1>
-    <p>Pick a shelf.</p>
+    <p>Pick a shelf. Move your cursor (or finger) over anything to turn it in the light.</p>
   </section>
   <div class="setup" id="setup">Firebase isn't connected yet. Paste your config into <code>firebaseConfig</code> at the top of the script in this file.</div>
   <nav id="tabs" role="tablist"></nav>
@@ -154,13 +154,10 @@ import {getFirestore,collection,addDoc,deleteDoc,doc,onSnapshot,query,orderBy,se
 
 // 1) PASTE YOUR FIREBASE CONFIG HERE (Firebase console > Project settings > Your apps > Web app)
 const firebaseConfig = {
-  apiKey: "AIzaSyCvj0I-JUd1AJ7vWKwTzH97HBgnZYR5Cto",
-  authDomain: "hotwheels-and-stuff.firebaseapp.com",
-  projectId: "hotwheels-and-stuff",
-  storageBucket: "hotwheels-and-stuff.firebasestorage.app",
-  messagingSenderId: "332582091390",
-  appId: "1:332582091390:web:43e4d8fd403c90ab22f62f",
-  measurementId: "G-9VD0JVD6TH"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  appId: "YOUR_APP_ID"
 };
 
 const CATS = ["Hot Wheels","LEGO","Action Figures","Die-cast Models"];
@@ -235,11 +232,22 @@ function compress(file, max = 720){
   return new Promise((res, rej) => {
     const img = new Image(), url = URL.createObjectURL(file);
     img.onload = () => {
-      const s = Math.min(1, max / Math.max(img.width, img.height));
-      const c = document.createElement('canvas'); c.width = img.width * s; c.height = img.height * s;
-      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
       URL.revokeObjectURL(url);
-      res(c.toDataURL('image/webp', .82));
+      const probe = document.createElement('canvas'); probe.width = probe.height = 1;
+      const webp = probe.toDataURL('image/webp').startsWith('data:image/webp'); // Safari lacks WebP encoding
+      const keepAlpha = file.type === 'image/png';
+      let size = max, out = '';
+      for(let i = 0; i < 6; i++){
+        const s = Math.min(1, size / Math.max(img.width, img.height));
+        const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(img.width * s)); c.height = Math.max(1, Math.round(img.height * s));
+        const g = c.getContext('2d');
+        if(!keepAlpha || !webp){ if(!keepAlpha){ g.fillStyle = '#15171c'; g.fillRect(0, 0, c.width, c.height); } }
+        g.drawImage(img, 0, 0, c.width, c.height);
+        out = webp ? c.toDataURL('image/webp', .82) : keepAlpha ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', .82);
+        if(out.length < 800000) break;
+        size = Math.round(size * .78);
+      }
+      res(out);
     };
     img.onerror = () => rej(new Error('Could not read that image.'));
     img.src = url;
