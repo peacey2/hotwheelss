@@ -3,120 +3,126 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>My Collection</title>
+<meta name="theme-color" content="#0e0f13">
+<title>The Showroom: My Collection</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0d0e11;--panel:#16181d;--line:#262932;--text:#ecebe6;--dim:#8d909a;--accent:#8fb8ff;--danger:#ff7b7b;
---r:18px;--ease:cubic-bezier(.2,.8,.2,1)}
+:root{--bg:#0e0f13;--panel:#17191f;--line:#2a2d36;--text:#ecebe6;--dim:#9498a3;--accent:#e9b872;--danger:#ff7b7b;--ease:cubic-bezier(.2,.8,.2,1);--cols:2}
+@media(min-width:640px){:root{--cols:3}}
+@media(min-width:960px){:root{--cols:4}}
 *{box-sizing:border-box;margin:0}
-html,body{min-height:100%}
-body{background:var(--bg);color:var(--text);font:400 16px/1.5 'DM Sans',system-ui,sans-serif;overflow-x:hidden;
-padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
-background:radial-gradient(60vmax 40vmax at 50% -10%,#2a3350 0,transparent 70%)}
-h1,h2,.brand{font-family:'Syne',sans-serif}
-header,main{position:relative;z-index:1;width:min(1200px,100% - 2rem);margin-inline:auto}
-header{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 0;gap:1rem;flex-wrap:wrap}
-.brand{font-weight:800;font-size:1.15rem;letter-spacing:.02em}
-button{font:inherit;color:inherit;cursor:pointer;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:.55rem 1.1rem;
-transition:transform .3s var(--ease),background .3s,border-color .3s}
-button:hover{transform:translateY(-2px);border-color:var(--accent)}
-button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-button.primary{background:var(--accent);color:#0d0e11;border-color:var(--accent);font-weight:500}
-button.danger{color:var(--danger)}
-.hero{padding:clamp(1.5rem,6vh,4rem) 0 1.5rem;text-align:center}
-.hero h1{font-size:clamp(2.2rem,8vw,5rem);line-height:1;font-weight:800;letter-spacing:-.02em;
-background:linear-gradient(100deg,var(--text) 40%,var(--accent) 50%,var(--text) 60%) 200% 0/250% 100%;
--webkit-background-clip:text;background-clip:text;color:transparent;animation:sweep 2.4s .3s var(--ease) forwards}
-@keyframes sweep{to{background-position:0 0}}
-.hero p{color:var(--dim);margin-top:.8rem}
-nav{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin:1.5rem 0 2rem;position:relative}
-nav button{background:transparent}
-nav button[aria-selected=true]{background:var(--text);color:var(--bg);border-color:var(--text)}
+html{-webkit-text-size-adjust:100%}
+body{background:linear-gradient(#15171d,#0b0c0f) fixed;color:var(--text);font:400 16px/1.5 'DM Sans',system-ui,sans-serif;min-height:100vh;min-height:100dvh;overflow-x:clip;
+padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+h1,h2,h3,.brand{font-family:'Syne',sans-serif}
+header,main{width:min(1100px,100% - 2rem);margin-inline:auto}
+header{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;gap:.6rem}
+.brand{font-weight:800;font-size:1.1rem}
+.actions{display:flex;gap:.5rem}
+.pill{font:inherit;font-size:.95rem;color:var(--text);cursor:pointer;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:.5rem 1rem;transition:transform .3s var(--ease),border-color .3s}
+.pill:hover{transform:translateY(-2px);border-color:var(--accent)}
+.pill.primary{background:var(--accent);color:#1b1208;border-color:var(--accent);font-weight:500}
+.pill.danger{color:var(--danger)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1{font-size:clamp(2rem,7vw,3.6rem);font-weight:800;line-height:1.05;letter-spacing:-.02em;padding:1rem 0 .3rem}
+.lead{color:var(--dim);margin-bottom:1.2rem}
+nav{display:flex;gap:.5rem;overflow-x:auto;padding:.2rem 0 1rem;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+nav::-webkit-scrollbar{display:none}
+nav .pill{white-space:nowrap;flex:none;background:transparent}
+nav .pill[aria-selected=true]{background:var(--text);color:var(--bg);border-color:var(--text)}
 nav small{opacity:.6;margin-left:.35rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:1.2rem;padding-bottom:4rem;perspective:1200px}
-.card{position:relative;border-radius:var(--r);background:linear-gradient(160deg,#1c1f27,#13151a);border:1px solid var(--line);
-aspect-ratio:4/5;cursor:pointer;transform-style:preserve-3d;
-transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .5s var(--ease),border-color .3s;
-animation:in .6s var(--ease) both;animation-delay:calc(var(--i,0)*45ms)}
-@keyframes in{from{opacity:0;transform:translateY(24px) scale(.96)}}
-.card.live{transition:transform .08s linear,border-color .3s}
-.card:hover{border-color:#3a4055}
-.card .glare{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;
-background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.16),transparent 55%)}
-.card.live .glare{opacity:1}
-.card .pic{position:absolute;inset:8% 8% 28%;display:grid;place-items:center;transform:translateZ(50px)}
-.card img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 18px 14px rgba(0,0,0,.55))}
-.card .meta{position:absolute;left:1rem;right:1rem;bottom:1rem;transform:translateZ(25px)}
-.card h3{font:700 1.02rem/1.2 'Syne',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card .sub{color:var(--dim);font-size:.85rem}
-.empty{grid-column:1/-1;text-align:center;color:var(--dim);padding:4rem 1rem;border:1px dashed var(--line);border-radius:var(--r)}
-dialog{border:none;background:transparent;color:var(--text);width:min(900px,100% - 1.5rem);max-height:94vh;margin:auto;overflow:visible}
-dialog::backdrop{background:rgba(5,6,8,.78);backdrop-filter:blur(6px);animation:fade .3s}
-dialog[open] .sheet{animation:pop .45s var(--ease)}
-@keyframes fade{from{opacity:0}}
-@keyframes pop{from{opacity:0;transform:translateY(30px) scale(.95)}}
-.sheet{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:1.4rem;max-height:94vh;overflow:auto;position:relative}
-.close{position:absolute;top:.8rem;right:.8rem;z-index:3;padding:.4rem .8rem}
-.detail{display:grid;grid-template-columns:1.1fr 1fr;gap:1.5rem;align-items:center}
-.stage{aspect-ratio:1;border-radius:var(--r);background:radial-gradient(circle at 50% 35%,#2b3248,#101217 70%);perspective:900px;display:grid;place-items:center;overflow:hidden;touch-action:none}
-.stage .obj{width:80%;height:80%;transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .6s var(--ease);display:grid;place-items:center}
-.stage.live .obj{transition:transform .06s linear}
-.stage img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 30px 22px rgba(0,0,0,.6));transform:translateZ(70px)}
-.info h2{font-size:clamp(1.5rem,4vw,2.2rem);line-height:1.1;margin-bottom:.5rem}
-.tags{display:flex;gap:.4rem;flex-wrap:wrap;margin:.7rem 0 1rem}
-.tags span{border:1px solid var(--line);border-radius:999px;padding:.15rem .7rem;font-size:.85rem;color:var(--dim)}
-.info p{color:#c9c9c4;white-space:pre-wrap}
-.actions{display:flex;gap:.6rem;margin-top:1.4rem}
-form{display:grid;gap:.8rem}
+
+/* ---- the shelf ---- */
+.shelf{--W:min(100vw - 2rem,1100px);--rowh:calc(var(--W) / var(--cols) * 1.42);position:relative;display:grid;grid-template-columns:repeat(var(--cols),1fr);
+grid-auto-rows:var(--rowh);min-height:calc(var(--rowh) * 2);margin-bottom:3rem;border-radius:10px;overflow:hidden;
+box-shadow:inset 0 0 50px rgba(0,0,0,.65),0 0 0 6px #2b1f16,0 0 0 8px #120c08}
+/* wooden planks drawn under every row */
+.shelf.sit{background:
+ repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--rowh) - 18px),#7a5841 calc(var(--rowh) - 18px),#7a5841 calc(var(--rowh) - 16px),#553b2a calc(var(--rowh) - 16px),#3d2a1d calc(var(--rowh) - 5px),#0f0a06 calc(var(--rowh) - 5px),#0f0a06 var(--rowh)),
+ repeating-linear-gradient(90deg,#1b1d24 0,#1b1d24 38px,#181a20 38px,#181a20 76px)}
+/* pegboard with a metal rail above every row */
+.shelf.hang{background:
+ repeating-linear-gradient(to bottom,#c9ced8 0,#c9ced8 2px,#8b919e 2px,#6a7080 8px,#0b0c0f 8px,#0b0c0f 10px,transparent 10px,transparent var(--rowh)),
+ radial-gradient(circle,#090a0d 0 2.4px,transparent 3px) 0 0/22px 22px,#2b2f39}
+.item{position:relative;display:flex;flex-direction:column;align-items:center;font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;
+animation:settle .7s var(--ease) both;animation-delay:calc(var(--i,0) * 60ms);-webkit-tap-highlight-color:transparent}
+.sit .item{justify-content:flex-end;padding-bottom:18px}
+.hang .item{padding-top:6px;transform-origin:50% 0}
+.pic{position:relative;width:76%;aspect-ratio:4/5;overflow:hidden;background:#0f1115;border-radius:8px;transition:transform .4s var(--ease),box-shadow .4s}
+.sit .pic{border:3px solid #23262e;box-shadow:0 12px 14px -6px rgba(0,0,0,.7)}
+.sit .item:hover .pic,.sit .item:focus-visible .pic{transform:translateY(-8px);box-shadow:0 22px 20px -8px rgba(0,0,0,.75)}
+.hang .item::before{content:"";width:12px;height:16px;border-radius:3px 3px 6px 6px;background:linear-gradient(90deg,#8b919e,#e3e6ec,#8b919e);z-index:2;box-shadow:0 2px 3px rgba(0,0,0,.6)}
+.hang .pic{margin-top:-6px;border-radius:6px 6px 4px 4px;border:4px solid #efede6;box-shadow:0 14px 16px -6px rgba(0,0,0,.7)}
+.hang .item:hover,.hang .item:focus-visible{animation:swing 1.3s ease-out}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.cap{position:absolute;left:0;right:0;bottom:0;padding:1.4rem .5rem .4rem;text-align:center;font:600 .78rem/1.15 'Syne',sans-serif;
+background:linear-gradient(transparent,rgba(0,0,0,.82));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
+@keyframes settle{from{opacity:0;transform:translateY(-26px)}}
+@keyframes swing{15%{transform:rotate(4.5deg)}35%{transform:rotate(-3.5deg)}55%{transform:rotate(2deg)}75%{transform:rotate(-1deg)}}
+.empty{grid-column:1/-1;grid-row:1;align-self:center;text-align:center;color:var(--dim);padding:0 1.5rem;pointer-events:none}
+
+/* ---- dialogs ---- */
+dialog{border:0;background:transparent;color:var(--text);position:fixed;inset:0;margin:auto;padding:0;width:min(860px,calc(100% - 1.5rem));height:fit-content;
+max-height:calc(100vh - 1.5rem);max-height:calc(100dvh - 1.5rem);overflow:visible}
+dialog::backdrop{background:rgba(5,6,8,.8);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+dialog[open] .sheet{animation:pop .4s var(--ease)}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.96)}}
+.sheet{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:1.2rem;max-height:calc(100vh - 1.5rem);max-height:calc(100dvh - 1.5rem);overflow:auto;-webkit-overflow-scrolling:touch}
+.sheet.narrow{max-width:520px;margin-inline:auto}
+.close{position:sticky;top:0;float:right;z-index:3}
+.detail{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;align-items:center;clear:both}
+.big img{width:100%;max-height:70vh;max-height:70dvh;object-fit:contain;background:#0f1115;border-radius:14px;display:block}
+.info h2{font-size:clamp(1.4rem,5vw,2.1rem);line-height:1.1;margin-bottom:.4rem}
+.tags{display:flex;gap:.4rem;flex-wrap:wrap;margin:.6rem 0 1rem}
+.tags span{border:1px solid var(--line);border-radius:999px;padding:.1rem .7rem;font-size:.85rem;color:var(--dim)}
+.info p{color:#cfcfca;white-space:pre-wrap}
+.info .pill{margin-top:1.2rem}
+form{display:grid;gap:.8rem;clear:both}
 label{display:grid;gap:.3rem;font-size:.9rem;color:var(--dim)}
-input,select,textarea{font:inherit;color:var(--text);background:#0f1115;border:1px solid var(--line);border-radius:12px;padding:.65rem .8rem;width:100%}
+input,select,textarea{font:inherit;font-size:16px;color:var(--text);background:#0f1115;border:1px solid var(--line);border-radius:12px;padding:.65rem .8rem;width:100%;-webkit-appearance:none;appearance:none}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
-.preview{max-height:150px;object-fit:contain;border-radius:12px;margin-inline:auto;display:none}
+.preview{max-height:130px;margin-inline:auto;border-radius:10px;display:none}
 .msg{min-height:1.2em;font-size:.9rem;color:var(--danger)}
-.toast{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom));transform:translate(-50%,40px);background:var(--text);color:var(--bg);
-padding:.6rem 1.1rem;border-radius:999px;opacity:0;transition:.4s var(--ease);z-index:20}
+.toast{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom));transform:translate(-50%,40px);background:var(--text);color:var(--bg);padding:.6rem 1.1rem;border-radius:999px;opacity:0;transition:.4s var(--ease);z-index:20;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-.setup{margin:2rem auto;max-width:520px;padding:1.2rem;border:1px solid var(--danger);border-radius:var(--r);color:var(--dim);display:none}
-@media(max-width:720px){.detail{grid-template-columns:1fr}.row{grid-template-columns:1fr}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}.hero h1{color:var(--text);background:none}}
+.setup{display:none;margin:0 0 1.5rem;padding:1rem;border:1px solid var(--danger);border-radius:14px;color:var(--dim)}
+@media(max-width:720px){.detail{grid-template-columns:1fr}.row{grid-template-columns:1fr}.big img{max-height:50vh;max-height:50dvh}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
 <header>
   <div class="brand">The Showroom</div>
-  <div>
-    <button id="addBtn" class="primary" hidden>Add item</button>
-    <button id="authBtn">Owner login</button>
+  <div class="actions">
+    <button id="addBtn" class="pill primary" hidden>Add item</button>
+    <button id="authBtn" class="pill">Owner login</button>
   </div>
 </header>
 
 <main>
-  <section class="hero">
-    <h1>My Collection</h1>
-    <p>Pick a shelf.</p>
-  </section>
-  <div class="setup" id="setup">Firebase isn't connected yet. Paste your config into <code>firebaseConfig</code> at the top of the script in this file.</div>
+  <h1>My Collection</h1>
+  <p class="lead">Tap anything on the shelf to take a closer look.</p>
+  <div class="setup" id="setup">Firebase isn't connected yet. Paste your config into <code>firebaseConfig</code> in the script at the bottom of this file.</div>
   <nav id="tabs" role="tablist"></nav>
-  <div class="grid" id="grid"></div>
+  <div class="shelf" id="shelf"></div>
 </main>
 
 <dialog id="viewDlg"><div class="sheet">
-  <button class="close" data-close>Close</button>
+  <button class="pill close" data-close>Close</button>
   <div class="detail">
-    <div class="stage" id="stage"><div class="obj"><img id="vImg" alt=""></div></div>
+    <div class="big"><img id="vImg" alt=""></div>
     <div class="info">
       <h2 id="vName"></h2>
       <div class="tags" id="vTags"></div>
       <p id="vNote"></p>
-      <div class="actions"><button class="danger" id="delBtn" hidden>Delete item</button></div>
+      <button class="pill danger" id="delBtn" hidden>Delete item</button>
     </div>
   </div>
 </div></dialog>
 
-<dialog id="addDlg"><div class="sheet" style="max-width:520px;margin:auto">
-  <button class="close" data-close>Close</button>
+<dialog id="addDlg"><div class="sheet narrow">
+  <button class="pill close" data-close>Close</button>
   <h2 style="margin-bottom:1rem">Add to the collection</h2>
   <form id="addForm">
     <div class="row">
@@ -128,21 +134,21 @@ padding:.6rem 1.1rem;border-radius:999px;opacity:0;transition:.4s var(--ease);z-
       <label>Year<input id="fYear" inputmode="numeric" maxlength="4"></label>
     </div>
     <label>Note<textarea id="fNote" rows="3" maxlength="500"></textarea></label>
-    <label>Photo (a transparent PNG looks best)<input id="fFile" type="file" accept="image/*" required></label>
+    <label>Photo<input id="fFile" type="file" accept="image/*" required></label>
     <img class="preview" id="fPrev" alt="Photo preview">
     <div class="msg" id="addMsg"></div>
-    <button class="primary" id="saveBtn">Save item</button>
+    <button class="pill primary" id="saveBtn">Save item</button>
   </form>
 </div></dialog>
 
-<dialog id="loginDlg"><div class="sheet" style="max-width:400px;margin:auto">
-  <button class="close" data-close>Close</button>
+<dialog id="loginDlg"><div class="sheet narrow" style="max-width:400px">
+  <button class="pill close" data-close>Close</button>
   <h2 style="margin-bottom:1rem">Owner login</h2>
   <form id="loginForm">
     <label>Email<input id="lEmail" type="email" required autocomplete="username"></label>
     <label>Password<input id="lPass" type="password" required autocomplete="current-password"></label>
     <div class="msg" id="loginMsg"></div>
-    <button class="primary">Log in</button>
+    <button class="pill primary">Log in</button>
   </form>
 </div></dialog>
 <div class="toast" id="toast"></div>
@@ -152,7 +158,7 @@ import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {getFirestore,collection,addDoc,deleteDoc,doc,onSnapshot,query,orderBy,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// 1) PASTE YOUR FIREBASE CONFIG HERE (Firebase console > Project settings > Your apps > Web app)
+// PASTE YOUR FIREBASE CONFIG HERE (Firebase console > Project settings > Your apps > Web app)
 const firebaseConfig = {
   apiKey: "AIzaSyCvj0I-JUd1AJ7vWKwTzH97HBgnZYR5Cto",
   authDomain: "hotwheels-and-stuff.firebaseapp.com",
@@ -164,51 +170,30 @@ const firebaseConfig = {
 };
 
 const CATS = ["Hot Wheels","LEGO","Action Figures","Die-cast Models"];
+const HANGING = ["Hot Wheels"]; // shelves where items hang from a pegboard rail
 const $ = id => document.getElementById(id);
 let items = [], cat = CATS[0], isOwner = false, current = null, db, auth;
 
 const toast = t => { const e=$('toast'); e.textContent=t; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),2200); };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-// ---- tilt effect (used by cards and the big viewer)
-function tilt(el, max, onGlare){
-  const move = e => {
-    const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
-    el.style.setProperty('--ry', ((x - .5) * max * 2).toFixed(1) + 'deg');
-    el.style.setProperty('--rx', ((.5 - y) * max * 2).toFixed(1) + 'deg');
-    el.style.setProperty('--gx', x * 100 + '%'); el.style.setProperty('--gy', y * 100 + '%');
-    el.classList.add('live');
-  };
-  const reset = () => { el.classList.remove('live'); el.style.setProperty('--rx','0deg'); el.style.setProperty('--ry','0deg'); };
-  el.addEventListener('pointermove', move);
-  el.addEventListener('pointerleave', reset);
-  el.addEventListener('pointerup', e => { if(e.pointerType !== 'mouse') reset(); });
-}
-
-// ---- render
-function renderTabs(){
+function render(){
   $('tabs').innerHTML = CATS.map(c => {
     const n = items.filter(i => i.category === c).length;
-    return `<button role="tab" aria-selected="${c===cat}" data-cat="${esc(c)}">${esc(c)}<small>${n}</small></button>`;
+    return `<button class="pill" role="tab" aria-selected="${c===cat}" data-cat="${esc(c)}">${esc(c)}<small>${n}</small></button>`;
   }).join('');
-}
-function renderGrid(){
   const list = items.filter(i => i.category === cat);
-  $('grid').innerHTML = list.length ? '' : `<div class="empty">${isOwner ? 'Nothing on this shelf yet. Use "Add item" to place your first piece.' : 'This shelf is empty for now. Check back soon.'}</div>`;
+  const sh = $('shelf');
+  sh.className = 'shelf ' + (HANGING.includes(cat) ? 'hang' : 'sit');
+  sh.innerHTML = list.length ? '' : `<div class="empty">${isOwner ? 'This shelf is empty. Use "Add item" to place your first piece.' : 'This shelf is empty for now. Check back soon.'}</div>`;
   list.forEach((it, i) => {
-    const d = document.createElement('div');
-    d.className = 'card'; d.style.setProperty('--i', Math.min(i, 12)); d.tabIndex = 0;
-    d.innerHTML = `<div class="pic"><img src="${it.image}" alt="${esc(it.name)}" loading="lazy"></div>
-      <div class="meta"><h3>${esc(it.name)}</h3><div class="sub">${esc([it.series, it.year].filter(Boolean).join(', '))}</div></div><div class="glare"></div>`;
-    tilt(d, 12);
-    d.onclick = () => openItem(it);
-    d.onkeydown = e => { if(e.key === 'Enter') openItem(it); };
-    $('grid').appendChild(d);
+    const b = document.createElement('button');
+    b.className = 'item'; b.style.setProperty('--i', Math.min(i, 10)); b.setAttribute('aria-label', it.name);
+    b.innerHTML = `<div class="pic"><img src="${it.image}" alt="" loading="lazy"><span class="cap">${esc(it.name)}</span></div>`;
+    b.onclick = () => openItem(it);
+    sh.appendChild(b);
   });
 }
-function render(){ renderTabs(); renderGrid(); }
-
 function openItem(it){
   current = it;
   $('vImg').src = it.image; $('vImg').alt = it.name;
@@ -218,11 +203,7 @@ function openItem(it){
   $('delBtn').hidden = !isOwner;
   $('viewDlg').showModal();
 }
-tilt($('stage'), 22);
-$('stage').addEventListener('pointermove', e => { $('stage').classList.add('live'); });
-$('stage').addEventListener('pointerleave', () => $('stage').classList.remove('live'));
 
-// ---- UI wiring
 $('tabs').onclick = e => { const b = e.target.closest('button'); if(!b) return; cat = b.dataset.cat; render(); };
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => b.closest('dialog').close());
 document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', e => { if(e.target === d) d.close(); }));
@@ -230,23 +211,23 @@ $('fCat').innerHTML = CATS.map(c => `<option>${esc(c)}</option>`).join('');
 $('addBtn').onclick = () => { $('fCat').value = cat; $('addDlg').showModal(); };
 $('authBtn').onclick = () => isOwner ? signOut(auth) : $('loginDlg').showModal();
 
-// compress photo to keep it small enough for Firestore (limit is 1 MB per document)
+// shrink photos so they fit in Firestore (1 MB per document). Safari can't encode WebP, so fall back to JPEG/PNG.
 function compress(file, max = 720){
   return new Promise((res, rej) => {
     const img = new Image(), url = URL.createObjectURL(file);
     img.onload = () => {
       URL.revokeObjectURL(url);
       const probe = document.createElement('canvas'); probe.width = probe.height = 1;
-      const webp = probe.toDataURL('image/webp').startsWith('data:image/webp'); // Safari lacks WebP encoding
-      const keepAlpha = file.type === 'image/png';
+      const webp = probe.toDataURL('image/webp').startsWith('data:image/webp');
+      const png = file.type === 'image/png';
       let size = max, out = '';
       for(let i = 0; i < 6; i++){
         const s = Math.min(1, size / Math.max(img.width, img.height));
         const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(img.width * s)); c.height = Math.max(1, Math.round(img.height * s));
         const g = c.getContext('2d');
-        if(!keepAlpha || !webp){ if(!keepAlpha){ g.fillStyle = '#15171c'; g.fillRect(0, 0, c.width, c.height); } }
+        if(!png){ g.fillStyle = '#15171c'; g.fillRect(0, 0, c.width, c.height); }
         g.drawImage(img, 0, 0, c.width, c.height);
-        out = webp ? c.toDataURL('image/webp', .82) : keepAlpha ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', .82);
+        out = webp ? c.toDataURL('image/webp', .82) : png ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', .82);
         if(out.length < 800000) break;
         size = Math.round(size * .78);
       }
@@ -261,7 +242,6 @@ $('fFile').onchange = async e => {
   try { $('fPrev').src = await compress(f, 300); $('fPrev').style.display = 'block'; } catch {}
 };
 
-// ---- Firebase
 try{
   if(firebaseConfig.apiKey.startsWith('YOUR_')) throw new Error('no config');
   const app = initializeApp(firebaseConfig);
@@ -288,7 +268,6 @@ try{
     e.preventDefault(); $('addMsg').textContent = ''; $('saveBtn').disabled = true;
     try {
       const image = await compress($('fFile').files[0]);
-      if(image.length > 900000) throw new Error('That photo is too large. Try a smaller one.');
       await addDoc(collection(db,'items'), {
         category: $('fCat').value, name: $('fName').value.trim(), series: $('fSeries').value.trim(),
         year: $('fYear').value.trim(), note: $('fNote').value.trim(), image, createdAt: serverTimestamp()
