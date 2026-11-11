@@ -46,7 +46,8 @@ box-shadow:inset 0 0 50px rgba(0,0,0,.65),0 0 0 6px #2b1f16,0 0 0 8px #120c08}
  repeating-linear-gradient(to bottom,#c9ced8 0,#c9ced8 2px,#8b919e 2px,#6a7080 8px,#0b0c0f 8px,#0b0c0f 10px,transparent 10px,transparent var(--rowh)),
  radial-gradient(circle,#090a0d 0 2.4px,transparent 3px) 0 0/22px 22px,#2b2f39}
 .item{position:relative;display:flex;flex-direction:column;align-items:center;font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;
-animation:settle .7s var(--ease) both;animation-delay:calc(var(--i,0) * 60ms);-webkit-tap-highlight-color:transparent}
+-webkit-tap-highlight-color:transparent}
+.enter .item{animation:settle .7s var(--ease) both;animation-delay:calc(var(--i,0) * 60ms)}
 .sit .item{justify-content:flex-end;padding-bottom:18px}
 .hang .item{padding-top:6px;transform-origin:50% 0}
 .pic{position:relative;width:76%;aspect-ratio:4/5;overflow:hidden;background:#0f1115;border-radius:8px;transition:transform .4s var(--ease),box-shadow .4s}
@@ -54,7 +55,13 @@ animation:settle .7s var(--ease) both;animation-delay:calc(var(--i,0) * 60ms);-w
 .sit .item:hover .pic,.sit .item:focus-visible .pic{transform:translateY(-8px);box-shadow:0 22px 20px -8px rgba(0,0,0,.75)}
 .hang .item::before{content:"";width:12px;height:16px;border-radius:3px 3px 6px 6px;background:linear-gradient(90deg,#8b919e,#e3e6ec,#8b919e);z-index:2;box-shadow:0 2px 3px rgba(0,0,0,.6)}
 .hang .pic{margin-top:-6px;border-radius:6px 6px 4px 4px;border:4px solid #efede6;box-shadow:0 14px 16px -6px rgba(0,0,0,.7)}
-.hang .item:hover,.hang .item:focus-visible{animation:swing 1.3s ease-out}
+.hang:not(.arranging) .item:hover,.hang:not(.arranging) .item:focus-visible{animation:swing 1.3s ease-out}
+.arranging .item{animation:wiggle .45s ease-in-out infinite alternate}
+.arranging .item:nth-child(even){animation-delay:-.2s}
+.arranging .item.picked{animation:none;z-index:3}
+.arranging .item.picked .pic{outline:3px solid var(--accent);outline-offset:3px;transform:translateY(-10px) scale(1.05)}
+@keyframes wiggle{from{transform:rotate(-.9deg)}to{transform:rotate(.9deg)}}
+.hint{margin:-.4rem 0 1rem;padding:.6rem .9rem;border:1px dashed var(--accent);border-radius:12px;color:var(--accent);font-size:.92rem}
 .pic img{width:100%;height:100%;object-fit:cover;display:block}
 .cap{position:absolute;left:0;right:0;bottom:0;padding:1.4rem .5rem .4rem;text-align:center;font:600 .78rem/1.15 'Syne',sans-serif;
 background:linear-gradient(transparent,rgba(0,0,0,.82));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
@@ -95,6 +102,7 @@ input,select,textarea{font:inherit;font-size:16px;color:var(--text);background:#
 <header>
   <div class="brand">The Showroom</div>
   <div class="actions">
+    <button id="arrBtn" class="pill" hidden>Rearrange</button>
     <button id="addBtn" class="pill primary" hidden>Add item</button>
     <button id="authBtn" class="pill">Owner login</button>
   </div>
@@ -105,6 +113,7 @@ input,select,textarea{font:inherit;font-size:16px;color:var(--text);background:#
   <p class="lead">Tap anything on the shelf to take a closer look.</p>
   <div class="setup" id="setup">Firebase isn't connected yet. Paste your config into <code>firebaseConfig</code> in the script at the bottom of this file.</div>
   <nav id="tabs" role="tablist"></nav>
+  <div class="hint" id="hint" hidden></div>
   <div class="shelf" id="shelf"></div>
 </main>
 
@@ -116,6 +125,7 @@ input,select,textarea{font:inherit;font-size:16px;color:var(--text);background:#
       <h2 id="vName"></h2>
       <div class="tags" id="vTags"></div>
       <p id="vNote"></p>
+      <button class="pill" id="frontBtn" hidden>Move to front</button>
       <button class="pill danger" id="delBtn" hidden>Delete item</button>
     </div>
   </div>
@@ -156,7 +166,7 @@ input,select,textarea{font:inherit;font-size:16px;color:var(--text);background:#
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import {getFirestore,collection,addDoc,deleteDoc,doc,onSnapshot,query,orderBy,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {getFirestore,collection,addDoc,deleteDoc,doc,onSnapshot,query,orderBy,serverTimestamp,updateDoc,writeBatch} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // PASTE YOUR FIREBASE CONFIG HERE (Firebase console > Project settings > Your apps > Web app)
 const firebaseConfig = {
@@ -167,30 +177,36 @@ const firebaseConfig = {
   messagingSenderId: "332582091390",
   appId: "1:332582091390:web:43e4d8fd403c90ab22f62f",
   measurementId: "G-9VD0JVD6TH"
-};
+}
 
 const CATS = ["Hot Wheels","LEGO","Action Figures","Die-cast Models"];
 const HANGING = ["Hot Wheels"]; // shelves where items hang from a pegboard rail
 const $ = id => document.getElementById(id);
-let items = [], cat = CATS[0], isOwner = false, current = null, db, auth;
+let items = [], cat = CATS[0], isOwner = false, current = null, db, auth, arrange = false, picked = null, lastCat = null;
 
 const toast = t => { const e=$('toast'); e.textContent=t; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),2200); };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-function render(){
+const key = it => it.order ?? -(it.createdAt?.toMillis?.() ?? Date.now()); // new items go first until you place them
+const sorted = () => items.filter(i => i.category === cat).sort((a, b) => key(a) - key(b));
+function render(enter = lastCat !== cat){
+  lastCat = cat;
   $('tabs').innerHTML = CATS.map(c => {
     const n = items.filter(i => i.category === c).length;
     return `<button class="pill" role="tab" aria-selected="${c===cat}" data-cat="${esc(c)}">${esc(c)}<small>${n}</small></button>`;
   }).join('');
-  const list = items.filter(i => i.category === cat);
+  const list = sorted();
   const sh = $('shelf');
-  sh.className = 'shelf ' + (HANGING.includes(cat) ? 'hang' : 'sit');
+  sh.className = 'shelf ' + (HANGING.includes(cat) ? 'hang' : 'sit') + (arrange ? ' arranging' : '') + (enter ? ' enter' : '');
+  $('hint').hidden = !arrange;
+  $('hint').textContent = picked ? 'Now tap the spot where it should go.' : 'Tap a piece to pick it up. The top-left spot is the best seat in the house.';
   sh.innerHTML = list.length ? '' : `<div class="empty">${isOwner ? 'This shelf is empty. Use "Add item" to place your first piece.' : 'This shelf is empty for now. Check back soon.'}</div>`;
   list.forEach((it, i) => {
     const b = document.createElement('button');
     b.className = 'item'; b.style.setProperty('--i', Math.min(i, 10)); b.setAttribute('aria-label', it.name);
     b.innerHTML = `<div class="pic"><img src="${it.image}" alt="" loading="lazy"><span class="cap">${esc(it.name)}</span></div>`;
-    b.onclick = () => openItem(it);
+    b.classList.toggle('picked', it.id === picked);
+    b.onclick = () => arrange ? place(it) : openItem(it);
     sh.appendChild(b);
   });
 }
@@ -200,11 +216,25 @@ function openItem(it){
   $('vName').textContent = it.name;
   $('vTags').innerHTML = [it.category, it.series, it.year].filter(Boolean).map(t => `<span>${esc(t)}</span>`).join('');
   $('vNote').textContent = it.note || '';
-  $('delBtn').hidden = !isOwner;
+  $('delBtn').hidden = !isOwner; $('frontBtn').hidden = !isOwner;
   $('viewDlg').showModal();
 }
 
-$('tabs').onclick = e => { const b = e.target.closest('button'); if(!b) return; cat = b.dataset.cat; render(); };
+async function place(it){
+  if(!isOwner) return;
+  if(!picked || picked === it.id){ picked = picked === it.id ? null : it.id; return render(false); }
+  const list = sorted(), from = list.findIndex(x => x.id === picked), to = list.findIndex(x => x.id === it.id);
+  picked = null;
+  if(from < 0 || to < 0) return render(false);
+  list.splice(to, 0, list.splice(from, 1)[0]);
+  try{
+    const b = writeBatch(db);
+    list.forEach((x, i) => { if(x.order !== i) b.update(doc(db, 'items', x.id), {order: i}); });
+    await b.commit();
+  }catch{ toast('Could not save the new order. Are you logged in?'); render(false); }
+}
+$('arrBtn').onclick = () => { arrange = !arrange; picked = null; $('arrBtn').textContent = arrange ? 'Done' : 'Rearrange'; render(false); };
+$('tabs').onclick = e => { const b = e.target.closest('button'); if(!b) return; cat = b.dataset.cat; picked = null; render(); };
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => b.closest('dialog').close());
 document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', e => { if(e.target === d) d.close(); }));
 $('fCat').innerHTML = CATS.map(c => `<option>${esc(c)}</option>`).join('');
@@ -253,7 +283,8 @@ try{
 
   onAuthStateChanged(auth, u => {
     isOwner = !!u;
-    $('addBtn').hidden = !isOwner;
+    $('addBtn').hidden = !isOwner; $('arrBtn').hidden = !isOwner;
+    if(!isOwner){ arrange = false; picked = null; $('arrBtn').textContent = 'Rearrange'; }
     $('authBtn').textContent = isOwner ? 'Log out' : 'Owner login';
     render();
   });
@@ -277,6 +308,11 @@ try{
     $('saveBtn').disabled = false;
   };
 
+  $('frontBtn').onclick = async () => {
+    if(!current) return;
+    try{ await updateDoc(doc(db,'items',current.id), {order: key(sorted()[0]) - 1}); $('viewDlg').close(); toast('Moved to the front'); }
+    catch{ toast('Could not move it. Are you logged in?'); }
+  };
   $('delBtn').onclick = async () => {
     if(!current || !confirm(`Delete "${current.name}"? This can't be undone.`)) return;
     try { await deleteDoc(doc(db,'items',current.id)); $('viewDlg').close(); toast('Deleted'); }
