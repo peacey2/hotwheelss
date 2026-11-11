@@ -56,11 +56,9 @@ box-shadow:inset 0 0 50px rgba(0,0,0,.65),0 0 0 6px #2b1f16,0 0 0 8px #120c08}
 .hang .item::before{content:"";width:12px;height:16px;border-radius:3px 3px 6px 6px;background:linear-gradient(90deg,#8b919e,#e3e6ec,#8b919e);z-index:2;box-shadow:0 2px 3px rgba(0,0,0,.6)}
 .hang .pic{margin-top:-6px;border-radius:6px 6px 4px 4px;border:4px solid #efede6;box-shadow:0 14px 16px -6px rgba(0,0,0,.7)}
 .hang:not(.arranging) .item:hover,.hang:not(.arranging) .item:focus-visible{animation:swing 1.3s ease-out}
-.arranging .item{animation:wiggle .45s ease-in-out infinite alternate}
-.arranging .item:nth-child(even){animation-delay:-.2s}
-.arranging .item.picked{animation:none;z-index:3}
+.arranging .item.picked{z-index:3}
+.arranging .pic{outline:2px dashed rgba(233,184,114,.55);outline-offset:3px}
 .arranging .item.picked .pic{outline:3px solid var(--accent);outline-offset:3px;transform:translateY(-10px) scale(1.05)}
-@keyframes wiggle{from{transform:rotate(-.9deg)}to{transform:rotate(.9deg)}}
 .hint{margin:-.4rem 0 1rem;padding:.6rem .9rem;border:1px dashed var(--accent);border-radius:12px;color:var(--accent);font-size:.92rem}
 .pic img{width:100%;height:100%;object-fit:cover;display:block}
 .cap{position:absolute;left:0;right:0;bottom:0;padding:1.4rem .5rem .4rem;text-align:center;font:600 .78rem/1.15 'Syne',sans-serif;
@@ -177,7 +175,7 @@ const firebaseConfig = {
   messagingSenderId: "332582091390",
   appId: "1:332582091390:web:43e4d8fd403c90ab22f62f",
   measurementId: "G-9VD0JVD6TH"
-}
+};
 
 const CATS = ["Hot Wheels","LEGO","Action Figures","Die-cast Models"];
 const HANGING = ["Hot Wheels"]; // shelves where items hang from a pegboard rail
