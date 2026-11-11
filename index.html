@@ -92,6 +92,47 @@ input,select,textarea{font:inherit;font-size:16px;color:var(--text);background:#
 .toast{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom));transform:translate(-50%,40px);background:var(--text);color:var(--bg);padding:.6rem 1.1rem;border-radius:999px;opacity:0;transition:.4s var(--ease);z-index:20;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .setup{display:none;margin:0 0 1.5rem;padding:1rem;border:1px solid var(--danger);border-radius:14px;color:var(--dim)}
+
+[hidden]{display:none!important}
+.menuwrap{margin-bottom:1rem}
+.menubtn{display:flex;width:100%;justify-content:space-between;align-items:center;gap:1rem;font:800 clamp(1.3rem,5vw,1.9rem)/1.1 'Syne',sans-serif;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:1rem 1.2rem;cursor:pointer;text-align:left}
+.menubtn svg{width:22px;height:22px;flex:none;transition:transform .4s var(--ease)}
+.menubtn[aria-expanded=true] svg{transform:rotate(180deg)}
+.menu{max-height:0;opacity:0;overflow:hidden;visibility:hidden;background:var(--panel);border-radius:18px;padding:0 1rem;transition:max-height .55s var(--ease),opacity .3s,visibility .55s,margin .4s}
+.menu.open{max-height:760px;opacity:1;visibility:visible;margin-top:.6rem;border:1px solid var(--line)}
+.mi{display:flex;width:100%;justify-content:space-between;align-items:baseline;font:700 clamp(1.4rem,6vw,2.2rem)/1.15 'Syne',sans-serif;color:var(--dim);background:none;border:0;border-bottom:1px solid var(--line);padding:.9rem .4rem;cursor:pointer;text-align:left;transition:color .25s,padding .3s var(--ease)}
+.mi:last-child{border-bottom:0}
+.mi small{font:400 .95rem 'DM Sans',sans-serif}
+.mi:hover{color:var(--text);padding-left:.9rem}
+.mi.on{color:var(--accent)}
+.mi.sub{font-size:clamp(1.1rem,4.6vw,1.6rem);padding-left:1.8rem}
+.mi.sub:hover{padding-left:2.3rem}
+.banner{display:flex;align-items:center;gap:1rem;margin:0 0 1rem;padding:.9rem 1.1rem;border-radius:16px}
+.banner h2{font-size:clamp(1.3rem,5vw,1.8rem);line-height:1}
+.banner p{font-size:.9rem;opacity:.75}
+.banner svg{width:56px;flex:none}
+.banner.bat{background:linear-gradient(120deg,#0a0b0d,#1a1d23);border:1px solid #2c3038;color:#ffd66b}
+.banner.pre{background:linear-gradient(120deg,#2b0b14,#431323);border:1px solid #8a909c;color:#c9ced8}
+.banner.pre h2{background:linear-gradient(90deg,#fff,#9aa1ad 45%,#fff 60%,#7d8491);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* Batcave: black glass shelves, one spotlight per piece */
+.shelf.sit.batman{background:
+ repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--rowh) - 16px),rgba(200,220,235,.7) calc(var(--rowh) - 16px),rgba(200,220,235,.7) calc(var(--rowh) - 14px),rgba(110,140,160,.2) calc(var(--rowh) - 14px),rgba(60,80,95,.3) calc(var(--rowh) - 4px),#000 calc(var(--rowh) - 4px),#000 var(--rowh)),
+ radial-gradient(ellipse 55% 85% at 50% 0,rgba(255,224,150,.22),transparent 72%) 0 0/calc(100% / var(--cols)) var(--rowh),#06070a;
+ box-shadow:inset 0 0 60px #000,0 0 0 6px #14171c,0 0 0 8px #000,0 0 40px rgba(255,205,90,.08)}
+.batman .pic{border-color:#15181d;box-shadow:0 0 22px rgba(255,205,90,.16),0 14px 16px -6px #000}
+.batman .cap{color:#ffd66b}
+/* Premium: chrome rails on dark velvet */
+.shelf.sit.premium{background:
+ repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--rowh) - 18px),#fff calc(var(--rowh) - 18px),#fff calc(var(--rowh) - 16px),#d5d9e0 calc(var(--rowh) - 16px),#8a909c calc(var(--rowh) - 11px),#eceff3 calc(var(--rowh) - 8px),#565c68 calc(var(--rowh) - 5px),#000 calc(var(--rowh) - 5px),#000 var(--rowh)),
+ radial-gradient(ellipse 60% 80% at 50% 0,rgba(255,255,255,.14),transparent 70%) 0 0/calc(100% / var(--cols)) var(--rowh),
+ repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px),#2b0b14;
+ box-shadow:inset 0 0 60px rgba(0,0,0,.7),0 0 0 6px #b9bec8,0 0 0 8px #4a4f5a}
+.premium .pic{border:3px solid #d5d9e0;box-shadow:0 0 0 1px #4a4f5a,0 14px 16px -6px #000}
+.shelf.selecting .pic{outline:2px dashed rgba(233,184,114,.55);outline-offset:3px}
+.item.chosen .pic{outline:3px solid var(--accent);outline-offset:3px}
+.item.chosen .pic::after{content:"\2713";position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#1b1208;display:grid;place-items:center;font-weight:700}
+.movebar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(.8rem + env(safe-area-inset-bottom));width:min(560px,calc(100% - 1.2rem));background:var(--panel);border:1px solid var(--accent);border-radius:20px;padding:.7rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;z-index:15;box-shadow:0 12px 40px rgba(0,0,0,.6)}
+body.selecting{padding-bottom:8rem}
 @media(max-width:720px){.detail{grid-template-columns:1fr}.row{grid-template-columns:1fr}.big img{max-height:50vh;max-height:50dvh}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
@@ -100,6 +141,7 @@ input,select,textarea{font:inherit;font-size:16px;color:var(--text);background:#
 <header>
   <div class="brand">The Showroom</div>
   <div class="actions">
+    <button id="selBtn" class="pill" hidden>Select</button>
     <button id="arrBtn" class="pill" hidden>Rearrange</button>
     <button id="addBtn" class="pill primary" hidden>Add item</button>
     <button id="authBtn" class="pill">Owner login</button>
@@ -110,9 +152,15 @@ input,select,textarea{font:inherit;font-size:16px;color:var(--text);background:#
   <h1>My Collection</h1>
   <p class="lead">Tap anything on the shelf to take a closer look.</p>
   <div class="setup" id="setup">Firebase isn't connected yet. Paste your config into <code>firebaseConfig</code> in the script at the bottom of this file.</div>
-  <nav id="tabs" role="tablist"></nav>
+  <div class="menuwrap">
+    <button id="menuBtn" class="menubtn" aria-expanded="false" aria-controls="menu"><span id="menuLabel"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+    <div class="menu" id="menu" role="menu"></div>
+  </div>
   <div class="hint" id="hint" hidden></div>
+  <div class="banner" id="banner" hidden></div>
   <div class="shelf" id="shelf"></div>
+  <div class="movebar" id="movebar" hidden><b id="selCount"></b><button class="pill" id="selAll">Select all</button><span id="dests" style="display:contents"></span></div>
 </main>
 
 <dialog id="viewDlg"><div class="sheet">
@@ -141,6 +189,7 @@ input,select,textarea{font:inherit;font-size:16px;color:var(--text);background:#
       <label>Series or brand<input id="fSeries" maxlength="60"></label>
       <label>Year<input id="fYear" inputmode="numeric" maxlength="4"></label>
     </div>
+    <label id="subWrap" hidden>Hot Wheels section<select id="fSub"><option value="">Main</option><option>Batman</option><option>Premium</option></select></label>
     <label>Note<textarea id="fNote" rows="3" maxlength="500"></textarea></label>
     <label>Photo<input id="fFile" type="file" accept="image/*" required></label>
     <img class="preview" id="fPrev" alt="Photo preview">
@@ -180,31 +229,43 @@ const firebaseConfig = {
 const CATS = ["Hot Wheels","LEGO","Action Figures","Die-cast Models"];
 const HANGING = ["Hot Wheels"]; // shelves where items hang from a pegboard rail
 const $ = id => document.getElementById(id);
-let items = [], cat = CATS[0], isOwner = false, current = null, db, auth, arrange = false, picked = null, lastCat = null;
+let items = [], cat = CATS[0], isOwner = false, current = null, db, auth, arrange = false, picked = null, lastCat = null, sub = '', selecting = false, sel = new Set();
+const VIEWS = [['Hot Wheels','','Hot Wheels'],['Hot Wheels','Batman','Batman'],['Hot Wheels','Premium','Premium'],['LEGO','','LEGO'],['Action Figures','','Action Figures'],['Die-cast Models','','Die-cast Models']];
+const inView = (i, c = cat, s = sub) => i.category === c && (c !== 'Hot Wheels' || (i.sub || '') === s);
 
 const toast = t => { const e=$('toast'); e.textContent=t; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),2200); };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 const key = it => it.order ?? -(it.createdAt?.toMillis?.() ?? Date.now()); // new items go first until you place them
-const sorted = () => items.filter(i => i.category === cat).sort((a, b) => key(a) - key(b));
-function render(enter = lastCat !== cat){
-  lastCat = cat;
-  $('tabs').innerHTML = CATS.map(c => {
-    const n = items.filter(i => i.category === c).length;
-    return `<button class="pill" role="tab" aria-selected="${c===cat}" data-cat="${esc(c)}">${esc(c)}<small>${n}</small></button>`;
-  }).join('');
+const sorted = () => items.filter(i => inView(i)).sort((a, b) => key(a) - key(b));
+const BAT = '<svg viewBox="0 0 64 32" fill="currentColor"><path d="M32 4l-3 5c-5-2-10-1-16 3 2 0 4 1 5 3-3 0-5 1-7 4 5-1 9 0 11 3 2-2 4-1 5 1 2 2 3 5 5 9 2-4 3-7 5-9 1-2 3-3 5-1 2-3 6-4 11-3-2-3-4-4-7-4 1-2 3-3 5-3-6-4-11-5-16-3z"/></svg>';
+function endSelect(){ selecting = false; sel.clear(); $('selBtn').textContent = 'Select'; }
+function toggleMenu(open = !$('menu').classList.contains('open')){ $('menu').classList.toggle('open', open); $('menuBtn').setAttribute('aria-expanded', open); }
+function render(enter = lastCat !== cat + '/' + sub){
+  lastCat = cat + '/' + sub;
+  $('selBtn').hidden = !(isOwner && cat === 'Hot Wheels');
+  if(cat !== 'Hot Wheels' && selecting) endSelect();
+  $('menuLabel').textContent = cat === 'Hot Wheels' && sub ? 'Hot Wheels: ' + sub : cat;
+  $('menu').innerHTML = VIEWS.map(([c, s, l]) => `<button class="mi${s ? ' sub' : ''}${c === cat && s === sub ? ' on' : ''}" role="menuitem" data-cat="${esc(c)}" data-sub="${esc(s)}"><span>${esc(l)}</span><small>${items.filter(i => inView(i, c, s)).length}</small></button>`).join('');
+  const bn = $('banner'); bn.hidden = !(cat === 'Hot Wheels' && sub);
+  bn.className = 'banner ' + (sub === 'Batman' ? 'bat' : 'pre');
+  bn.innerHTML = sub === 'Batman' ? BAT + '<div><h2>The Batcave</h2><p>Black glass, one spotlight each.</p></div>' : '<div><h2>The Gallery</h2><p>Premium pieces on chrome and velvet.</p></div>';
+  document.body.classList.toggle('selecting', selecting);
+  $('movebar').hidden = !selecting;
+  $('selCount').textContent = sel.size + ' selected';
+  $('dests').innerHTML = [['', 'Main'], ['Batman', 'Batman'], ['Premium', 'Premium']].filter(d => d[0] !== sub).map(d => `<button class="pill primary" data-dest="${d[0]}">Move to ${d[1]}</button>`).join('');
   const list = sorted();
   const sh = $('shelf');
-  sh.className = 'shelf ' + (HANGING.includes(cat) ? 'hang' : 'sit') + (arrange ? ' arranging' : '') + (enter ? ' enter' : '');
-  $('hint').hidden = !arrange;
-  $('hint').textContent = picked ? 'Now tap the spot where it should go.' : 'Tap a piece to pick it up. The top-left spot is the best seat in the house.';
+  sh.className = 'shelf ' + (HANGING.includes(cat) && !sub ? 'hang' : 'sit') + (cat === 'Hot Wheels' && sub ? ' ' + sub.toLowerCase() : '') + (selecting ? ' selecting' : '') + (arrange ? ' arranging' : '') + (enter ? ' enter' : '');
+  $('hint').hidden = !(arrange || selecting);
+  $('hint').textContent = selecting ? 'Tick the cars you want to move, then pick where they go below.' : picked ? 'Now tap the spot where it should go.' : 'Tap a piece to pick it up. The top-left spot is the best seat in the house.';
   sh.innerHTML = list.length ? '' : `<div class="empty">${isOwner ? 'This shelf is empty. Use "Add item" to place your first piece.' : 'This shelf is empty for now. Check back soon.'}</div>`;
   list.forEach((it, i) => {
     const b = document.createElement('button');
     b.className = 'item'; b.style.setProperty('--i', Math.min(i, 10)); b.setAttribute('aria-label', it.name);
     b.innerHTML = `<div class="pic"><img src="${it.image}" alt="" loading="lazy"><span class="cap">${esc(it.name)}</span></div>`;
-    b.classList.toggle('picked', it.id === picked);
-    b.onclick = () => arrange ? place(it) : openItem(it);
+    b.classList.toggle('picked', it.id === picked); b.classList.toggle('chosen', sel.has(it.id));
+    b.onclick = () => selecting ? (sel.has(it.id) ? sel.delete(it.id) : sel.add(it.id), render(false)) : arrange ? place(it) : openItem(it);
     sh.appendChild(b);
   });
 }
@@ -212,7 +273,7 @@ function openItem(it){
   current = it;
   $('vImg').src = it.image; $('vImg').alt = it.name;
   $('vName').textContent = it.name;
-  $('vTags').innerHTML = [it.category, it.series, it.year].filter(Boolean).map(t => `<span>${esc(t)}</span>`).join('');
+  $('vTags').innerHTML = [it.category, it.sub, it.series, it.year].filter(Boolean).map(t => `<span>${esc(t)}</span>`).join('');
   $('vNote').textContent = it.note || '';
   $('delBtn').hidden = !isOwner; $('frontBtn').hidden = !isOwner;
   $('viewDlg').showModal();
@@ -231,12 +292,27 @@ async function place(it){
     await b.commit();
   }catch{ toast('Could not save the new order. Are you logged in?'); render(false); }
 }
-$('arrBtn').onclick = () => { arrange = !arrange; picked = null; $('arrBtn').textContent = arrange ? 'Done' : 'Rearrange'; render(false); };
-$('tabs').onclick = e => { const b = e.target.closest('button'); if(!b) return; cat = b.dataset.cat; picked = null; render(); };
+$('arrBtn').onclick = () => { endSelect(); arrange = !arrange; picked = null; $('arrBtn').textContent = arrange ? 'Done' : 'Rearrange'; render(false); };
+$('menu').onclick = e => { const b = e.target.closest('.mi'); if(!b) return; cat = b.dataset.cat; sub = b.dataset.sub; picked = null; sel.clear(); toggleMenu(false); render(); };
+$('menuBtn').onclick = () => toggleMenu();
+document.addEventListener('click', e => { if(!e.target.closest('.menuwrap')) toggleMenu(false); });
+$('selBtn').onclick = () => { const on = !selecting; endSelect(); arrange = false; picked = null; $('arrBtn').textContent = 'Rearrange'; if(on){ selecting = true; $('selBtn').textContent = 'Cancel'; } render(false); };
+$('selAll').onclick = () => { sorted().forEach(x => sel.add(x.id)); render(false); };
+$('movebar').onclick = async e => {
+  const b = e.target.closest('[data-dest]'); if(!b) return;
+  if(!sel.size) return toast('Tick some cars first');
+  const n = sel.size, dest = b.dataset.dest;
+  try{
+    const w = writeBatch(db); sel.forEach(id => w.update(doc(db,'items',id), {sub: dest})); await w.commit();
+    toast(`Moved ${n} to ${dest || 'Main'}`); endSelect(); render(false);
+  }catch{ toast('Could not move them. Are you logged in?'); }
+};
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => b.closest('dialog').close());
 document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', e => { if(e.target === d) d.close(); }));
 $('fCat').innerHTML = CATS.map(c => `<option>${esc(c)}</option>`).join('');
-$('addBtn').onclick = () => { $('fCat').value = cat; $('addDlg').showModal(); };
+const subVis = () => { $('subWrap').hidden = $('fCat').value !== 'Hot Wheels'; };
+$('fCat').onchange = subVis;
+$('addBtn').onclick = () => { $('fCat').value = cat; $('fSub').value = sub; subVis(); $('addDlg').showModal(); };
 $('authBtn').onclick = () => isOwner ? signOut(auth) : $('loginDlg').showModal();
 
 // shrink photos so they fit in Firestore (1 MB per document). Safari can't encode WebP, so fall back to JPEG/PNG.
@@ -282,7 +358,7 @@ try{
   onAuthStateChanged(auth, u => {
     isOwner = !!u;
     $('addBtn').hidden = !isOwner; $('arrBtn').hidden = !isOwner;
-    if(!isOwner){ arrange = false; picked = null; $('arrBtn').textContent = 'Rearrange'; }
+    if(!isOwner){ endSelect(); arrange = false; picked = null; $('arrBtn').textContent = 'Rearrange'; }
     $('authBtn').textContent = isOwner ? 'Log out' : 'Owner login';
     render();
   });
@@ -298,7 +374,7 @@ try{
     try {
       const image = await compress($('fFile').files[0]);
       await addDoc(collection(db,'items'), {
-        category: $('fCat').value, name: $('fName').value.trim(), series: $('fSeries').value.trim(),
+        category: $('fCat').value, sub: $('fCat').value === 'Hot Wheels' ? $('fSub').value : '', name: $('fName').value.trim(), series: $('fSeries').value.trim(),
         year: $('fYear').value.trim(), note: $('fNote').value.trim(), image, createdAt: serverTimestamp()
       });
       $('addForm').reset(); $('fPrev').style.display = 'none'; $('addDlg').close(); toast('Saved');
